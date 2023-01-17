@@ -90,7 +90,6 @@ window.onmousemove = function (e) {
   colorHexCode.textContent = hexCode;
 
   if (isWhite(hexCode)) {
-    console.log("isWhite");
     colorPreview.classList.add("colorPreview-white-border");
   } else {
     colorPreview.classList.remove("colorPreview-white-border");
