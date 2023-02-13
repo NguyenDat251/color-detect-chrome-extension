@@ -30,38 +30,49 @@ chrome.runtime.onMessage.addListener((message, sender, senderResponse) => {
         canvas.height = bitmap.height;
         let context = canvas.getContext("2d");
         context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
+        canvas.classList.add("mainCanvas");
 
         document.body.appendChild(canvas);
 
+        document.body.style.removeProperty("pointer-events");
+
         let actualColor = "ffffff";
 
-        // canvas.addEventListener("mousemove", function (e) {
-        //   var pos = {
-        //     x: canvas.offsetLeft,
-        //     y: canvas.offsetTop,
-        //   };
-        //   var x = e.pageX - pos.x;
-        //   var y = e.pageY - pos.y;
-        //   var c = canvas.getContext("2d");
-        //   var p = c.getImageData(x, y, 1, 1).data;
-        //   actualColor = ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
-        //   console.log("🚀 ~ file: screenShot.js:46 ~ actualColor", actualColor);
-        // });
+        const tooltip = document.createElement("div");
+        tooltip.classList.add("tooltip-color-detect");
 
-        // return canvas.toDataURL();
+        const colorPreview = document.createElement("div");
+        colorPreview.classList.add("colorPreview-color-detect");
+
+        tooltip.appendChild(colorPreview);
+
+        const colorHexCode = document.createElement("span");
+        colorHexCode.classList.add("colorHexCode-color-detect");
+        colorHexCode.textContent = "#b3e879";
+
+        tooltip.appendChild(colorHexCode);
+
+        document.body.appendChild(tooltip);
+
+        canvas.addEventListener("mousemove", function (e) {
+          var pos = {
+            x: canvas.offsetLeft,
+            y: canvas.offsetTop,
+          };
+          var x = e.pageX - pos.x;
+          var y = e.pageY - pos.y;
+          var c = canvas.getContext("2d");
+          var p = c.getImageData(x, y, 1, 1).data;
+          actualColor = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
+
+          colorPreview.style.backgroundColor = actualColor;
+          colorHexCode.textContent = actualColor;
+          let xPointer = e.clientX,
+            yPointer = e.clientY;
+          tooltip.style.top = yPointer - 90 + "px";
+          tooltip.style.left = xPointer + "px";
+        });
       })
-      //   //TODO download the image from the URL
-      //   .then((url) => {
-      //     chrome.runtime.sendMessage({ name: "download", url }, (response) => {
-      //       if (response.success) {
-      //         alert("Screenshot saved");
-      //       } else {
-      //         alert("Could not save screenshot");
-      //       }
-      //       canvas.remove();
-      //       senderResponse({ success: true });
-      //     });
-      //   })
       .catch((err) => {
         alert("Could not take screenshot");
         senderResponse({ success: false, message: err });

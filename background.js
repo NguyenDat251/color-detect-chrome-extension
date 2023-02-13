@@ -56,10 +56,10 @@ chrome.action.onClicked.addListener(async (tab) => {
     target: { tabId: tab.id },
   });
 
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    files: ["scripts/content.js"],
-  });
+  // chrome.scripting.executeScript({
+  //   target: { tabId: tab.id },
+  //   files: ["scripts/content.js"],
+  // });
 
   chrome.desktopCapture.chooseDesktopMedia(
     ["screen", "window", "tab"],

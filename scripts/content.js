@@ -49,57 +49,28 @@ function rgbToHex(rgb) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
-function rgba2hex(orig) {
-  var a,
-    isPercent,
-    rgb = orig
-      .replace(/\s/g, "")
-      .match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
-    alpha = ((rgb && rgb[4]) || "").trim(),
-    hex = rgb
-      ? (rgb[1] | (1 << 8)).toString(16).slice(1) +
-        (rgb[2] | (1 << 8)).toString(16).slice(1) +
-        (rgb[3] | (1 << 8)).toString(16).slice(1)
-      : orig;
+// window.onmousemove = function (e) {
+//   const activeTextarea = document.activeElement;
 
-  if (alpha !== "") {
-    a = "";
-  } else {
-    a = 01;
-  }
-  // multiply before convert to HEX
-  a = ((a * 255) | (1 << 8)).toString(16).slice(1);
-  hex = hex + a;
+//   const backgroundColorHovered = getComputedStyle(e.target).backgroundColor;
+//   const fontColorHovered = getComputedStyle(e.target).color;
 
-  return "#" + hex;
-}
+//   const hexCode = rgba2hex(backgroundColorHovered);
 
-const isWhite = (hex) => hex === "#00000000" || hex === "#ffffffff";
+//   colorPreview.style.backgroundColor = hexCode;
+//   colorHexCode.textContent = hexCode;
 
-document.body.style.pointerEvents = "none";
+//   if (isWhite(hexCode)) {
+//     colorPreview.classList.add("colorPreview-white-border");
+//   } else {
+//     colorPreview.classList.remove("colorPreview-white-border");
+//   }
 
-window.onmousemove = function (e) {
-  const activeTextarea = document.activeElement;
-
-  const backgroundColorHovered = getComputedStyle(e.target).backgroundColor;
-  const fontColorHovered = getComputedStyle(e.target).color;
-
-  const hexCode = rgba2hex(backgroundColorHovered);
-
-  colorPreview.style.backgroundColor = hexCode;
-  colorHexCode.textContent = hexCode;
-
-  if (isWhite(hexCode)) {
-    colorPreview.classList.add("colorPreview-white-border");
-  } else {
-    colorPreview.classList.remove("colorPreview-white-border");
-  }
-
-  var x = e.clientX,
-    y = e.clientY;
-  tooltip.style.top = y - 90 + "px";
-  tooltip.style.left = x + "px";
-};
+//   var x = e.clientX,
+//     y = e.clientY;
+//   tooltip.style.top = y - 90 + "px";
+//   tooltip.style.left = x + "px";
+// };
 
 window.onmousedown = function (e) {
   e.preventDefault();
