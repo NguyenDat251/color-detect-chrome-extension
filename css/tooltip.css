@@ -20,6 +20,8 @@
   box-sizing: content-box;
 
   background-color: #fff;
+
+  z-index: 11;
 }
 
 .colorPreview-color-detect {
@@ -47,4 +49,12 @@
   border-width: 10px;
   border-style: solid;
   border-color: #5e0c1d transparent transparent transparent;
+}
+
+.mainCanvas {
+  cursor: pointer;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  filter: blur(0px) !important;
 }
