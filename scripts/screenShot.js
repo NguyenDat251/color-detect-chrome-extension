@@ -2,7 +2,7 @@ function rgbToHex(r, g, b) {
   return componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 function componentToHex(c) {
-  var hex = c.toString(16);
+  let hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
 
@@ -11,13 +11,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const img = new Image();
 
   const canvas = document.createElement("canvas");
-  let context = canvas.getContext("2d");
+  let context = canvas.getContext("2d", { willReadFrequently: true });
 
   img.src = image;
+  const { width, availHeight: height } = screen;
+
   img.onload = function () {
-    canvas.width = img.width;
-    canvas.height = img.height;
-    context.drawImage(img, 0, 0); // Or at whatever offset you like
+    canvas.width = width;
+    canvas.height = height;
+    context.drawImage(img, 0, 0, width, height);
   };
 
   canvas.classList.add("mainCanvas");
@@ -41,14 +43,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   document.body.appendChild(tooltip);
 
   canvas.addEventListener("mousemove", function (e) {
-    var pos = {
+    let pos = {
       x: canvas.offsetLeft,
       y: canvas.offsetTop,
     };
-    var x = e.pageX - pos.x;
-    var y = e.pageY - pos.y;
-    var c = canvas.getContext("2d");
-    var p = c.getImageData(x, y, 1, 1).data;
+    let x = e.pageX - pos.x;
+    let y = e.pageY - pos.y;
+    let p = context.getImageData(x, y, 1, 1).data;
     actualColor = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
 
     colorPreview.style.backgroundColor = actualColor;
@@ -60,4 +61,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   });
 
   document.body.style.removeProperty("pointer-events");
+  document.body.style.setProperty("position", "fixed");
 });
