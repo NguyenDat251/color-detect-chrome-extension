@@ -7,7 +7,16 @@ function componentToHex(c) {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  const { image } = request;
+  const { image, isOff } = request;
+
+  if (isOff) {
+    const canvas = document.getElementsByClassName("mainCanvas")[0];
+    canvas.remove();
+    const tooltip = document.getElementsByClassName("tooltip-color-detect")[0];
+    tooltip.remove();
+    return;
+  }
+
   const img = new Image();
 
   const canvas = document.createElement("canvas");

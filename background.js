@@ -51,6 +51,14 @@ chrome.action.onClicked.addListener(async (tab) => {
     text: nextState,
   });
 
+  if (nextState === "OFF") {
+    chrome.tabs.captureVisibleTab(null, {}, function (image) {
+      chrome.tabs.sendMessage(tab.id, { isOff: true });
+    });
+
+    return;
+  }
+
   await chrome.scripting.insertCSS({
     files: ["css/tooltip.css"],
     target: { tabId: tab.id },
