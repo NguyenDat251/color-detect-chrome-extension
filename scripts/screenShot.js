@@ -6,6 +6,8 @@ function componentToHex(c) {
   return hex.length == 1 ? "0" + hex : hex;
 }
 
+let prevPositionValue;
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const { image, isOff } = request;
 
@@ -14,6 +16,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     canvas.remove();
     const tooltip = document.getElementsByClassName("tooltip-color-detect")[0];
     tooltip.remove();
+    document.body.style.setProperty(
+      "position",
+      prevPositionValue ? prevPositionValue : "relative"
+    );
+
     return;
   }
 
@@ -70,5 +77,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   });
 
   document.body.style.removeProperty("pointer-events");
+  prevPositionValue = document.body.style.getPropertyValue("position");
   document.body.style.setProperty("position", "fixed");
 });
