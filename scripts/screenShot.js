@@ -42,7 +42,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   canvas.classList.add("mainCanvas");
   canvas.style.setProperty("z-index", Number.MAX_SAFE_INTEGER - 1);
-
   document.body.appendChild(canvas);
 
   const tooltip = document.createElement("div");
@@ -50,16 +49,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   const colorPreview = document.createElement("div");
   colorPreview.classList.add("colorPreview-color-detect");
-
   tooltip.appendChild(colorPreview);
 
   const colorHexCode = document.createElement("span");
   colorHexCode.classList.add("colorHexCode-color-detect");
   colorHexCode.textContent = "#b3e879";
-
   tooltip.appendChild(colorHexCode);
-  tooltip.style.setProperty("z-index", Number.MAX_SAFE_INTEGER);
 
+  tooltip.style.setProperty("z-index", Number.MAX_SAFE_INTEGER);
   document.body.appendChild(tooltip);
 
   canvas.addEventListener("mousemove", function (e) {
@@ -83,6 +80,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const isContainFlippedClass = tooltip.classList.contains(
       "tooltip-color-detect-flip"
     );
+
     if (tooltipTop < 0) {
       tooltipTop = yPointer + 50;
 
@@ -98,7 +96,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     tooltip.style.transform = `translateY(${tooltipTop}px) translateX(${
       xPointer - 30
     }px)`;
-    // tooltip.style.left = xPointer - 30 + "px";
   });
 
   document.body.style.removeProperty("pointer-events");

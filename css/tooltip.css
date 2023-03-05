@@ -29,14 +29,14 @@
   margin-top: 5px;
   color: #5e0c1d;
   font-family: "Ubuntu", sans-serif;
+  font-weight: 500;
 }
 
 .tooltip-color-detect::after {
   content: " ";
   position: absolute;
-  top: 100%; /* At the bottom of the tooltip */
+  top: 100%;
   right: calc(100% - 30px);
-  /* margin-left: 50px; */
   border-width: 10px;
   border-style: solid;
   border-color: #5e0c1d transparent transparent transparent;
