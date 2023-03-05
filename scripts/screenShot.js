@@ -32,12 +32,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   let context = canvas.getContext("2d", { willReadFrequently: true });
 
   img.src = image;
-  const { width, availHeight: height } = screen;
+  const { innerWidth: screenWidth, innerHeight: screenHeight } = window;
 
   img.onload = function () {
-    canvas.width = width;
-    canvas.height = height;
-    context.drawImage(img, 0, 0, width, height);
+    canvas.width = screenWidth;
+    canvas.height = screenHeight;
+    context.drawImage(img, 0, 0, screenWidth, screenHeight);
   };
 
   canvas.classList.add("mainCanvas");
