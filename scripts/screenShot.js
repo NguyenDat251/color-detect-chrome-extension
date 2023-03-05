@@ -8,6 +8,8 @@ function componentToHex(c) {
 
 let prevPositionValue;
 
+const TOOLTIP_HEIGHT = 76;
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const { image, isOff } = request;
 
@@ -39,6 +41,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   };
 
   canvas.classList.add("mainCanvas");
+  canvas.style.setProperty("z-index", Number.MAX_SAFE_INTEGER - 1);
 
   document.body.appendChild(canvas);
 
@@ -55,6 +58,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   colorHexCode.textContent = "#b3e879";
 
   tooltip.appendChild(colorHexCode);
+  tooltip.style.setProperty("z-index", Number.MAX_SAFE_INTEGER);
 
   document.body.appendChild(tooltip);
 
@@ -65,6 +69,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     };
     let x = e.pageX - pos.x;
     let y = e.pageY - pos.y;
+
     let p = context.getImageData(x, y, 1, 1).data;
     actualColor = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
 
@@ -72,8 +77,28 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     colorHexCode.textContent = actualColor;
     let xPointer = e.clientX,
       yPointer = e.clientY;
-    tooltip.style.top = yPointer - 90 + "px";
-    tooltip.style.left = xPointer + "px";
+
+    let tooltipTop = yPointer - TOOLTIP_HEIGHT - 20;
+
+    const isContainFlippedClass = tooltip.classList.contains(
+      "tooltip-color-detect-flip"
+    );
+    if (tooltipTop < 0) {
+      tooltipTop = yPointer + 50;
+
+      if (!isContainFlippedClass) {
+        tooltip.classList.add("tooltip-color-detect-flip");
+      }
+    } else {
+      if (isContainFlippedClass) {
+        tooltip.classList.remove("tooltip-color-detect-flip");
+      }
+    }
+
+    tooltip.style.transform = `translateY(${tooltipTop}px) translateX(${
+      xPointer - 30
+    }px)`;
+    // tooltip.style.left = xPointer - 30 + "px";
   });
 
   document.body.style.removeProperty("pointer-events");
